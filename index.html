@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profit Sharing Calculator</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <a class="navbar-brand" href="#">Profit Sharing Calculator</a>
+    </nav>
+
+    <div class="container mt-5">
+        <div class="card">
+            <div class="card-body">
+                <h2 class="card-title mb-4">Calculate Profit Share</h2>
+                <form id="profitForm">
+                    <div class="form-group">
+                        <label for="showName">Name of the Show</label>
+                        <input type="text" class="form-control" id="showName" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="totalAmount">Total Amount ($)</label>
+                        <input type="number" class="form-control" id="totalAmount" step="0.01" min="0" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="numberOfCompanies">Number of Companies</label>
+                        <input type="number" class="form-control" id="numberOfCompanies" min="1" required>
+                        <button type="button" class="btn btn-secondary mt-2" onclick="generateCompanyFields()">Add Companies</button>
+                    </div>
+
+                    <!-- Companies Section -->
+                    <div id="companiesSection" style="display: none;">
+                        <div id="companiesContainer">
+                            <!-- Company fields will be added here -->
+                        </div>
+
+                        <!-- Distribution Type -->
+                        <div class="form-group mt-4">
+                            <label>Distribution Type</label>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="distributionType" id="equalShare" value="equal" checked>
+                                <label class="form-check-label" for="equalShare">Equal Share</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="distributionType" id="percentageShare" value="percentage">
+                                <label class="form-check-label" for="percentageShare">Percentage Based</label>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Calculate</button>
+                    </div>
+                </form>
+
+                <div id="result" class="mt-4" style="display: none;">
+                    <h3>Results</h3>
+                    <div id="resultContent"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <!-- Custom JS -->
+    <script src="js/script.js"></script>
+</body>
+</html> 
