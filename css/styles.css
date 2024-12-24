@@ -1,6 +1,13 @@
 body {
-    font-family: Arial, sans-serif;
+    font-family: 'Roboto', sans-serif;
     background-color: #f8f9fa;
+}
+
+.navbar-brand {
+    font-weight: 900;
+    letter-spacing: 0.5px;
+    font-size: 2rem;
+    padding: 0.5rem 0;
 }
 
 .card {
@@ -9,6 +16,7 @@ body {
 
 .card-title {
     color: #007bff;
+    font-weight: 500;
 }
 
 #result {
@@ -24,4 +32,25 @@ body {
     background-color: white;
     border-radius: 5px;
     border: 1px solid #dee2e6;
+}
+
+/* Additional font-weight classes for different text elements */
+h1, h2, h3, h4 {
+    font-weight: 500;
+}
+
+.form-label {
+    font-weight: 400;
+}
+
+.alert {
+    font-weight: 300;
+}
+
+.alert strong {
+    font-weight: 500;
+}
+
+.btn {
+    font-weight: 500;
 } 
