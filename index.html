@@ -24,16 +24,42 @@
                 <h2 class="card-title mb-4">Calculate Profit Share</h2>
                 <form id="profitForm">
                     <div class="form-group">
-                        <label for="showName">Name of the Show</label>
-                        <input type="text" class="form-control" id="showName" required>
+                        <label for="showName">Name of the Show *</label>
+                        <input type="text" 
+                               class="form-control" 
+                               id="showName" 
+                               required 
+                               minlength="1"
+                               placeholder="Enter show name (required)">
+                        <small class="text-danger" id="showNameError" style="display: none;">
+                            Please enter the name of the show
+                        </small>
                     </div>
                     <div class="form-group">
-                        <label for="totalAmount">Total Amount ($)</label>
-                        <input type="number" class="form-control" id="totalAmount" step="0.01" min="0" required>
+                        <label for="totalAmount">Total Amount ($) *</label>
+                        <input type="number" 
+                               class="form-control" 
+                               id="totalAmount" 
+                               step="0.01" 
+                               min="0" 
+                               required
+                               placeholder="Enter total amount (required)">
+                        <small class="text-danger" id="totalAmountError" style="display: none;">
+                            Please enter a valid total amount
+                        </small>
                     </div>
                     <div class="form-group">
-                        <label for="numberOfCompanies">Number of Companies</label>
-                        <input type="number" class="form-control" id="numberOfCompanies" min="1" required>
+                        <label for="numberOfCompanies">Number of Companies (2-10) *</label>
+                        <input type="number" 
+                               class="form-control" 
+                               id="numberOfCompanies" 
+                               min="2" 
+                               max="10" 
+                               required
+                               placeholder="Enter number of companies (2-10)">
+                        <small class="text-danger" id="numberOfCompaniesError" style="display: none;">
+                            Please enter a number between 2 and 10
+                        </small>
                         <button type="button" class="btn btn-secondary mt-2" onclick="generateCompanyFields()">Add Companies</button>
                     </div>
 
@@ -66,6 +92,11 @@
             </div>
         </div>
     </div>
+    <footer class="footer mt-5 py-3 bg-primary text-white">
+        <div class="container text-center">
+            <span>© 2024 Profit Sharing Calculator | Made with <span class="text-danger">❤</span> by JJF Code</span>
+        </div>
+    </footer>
 
     <!-- Bootstrap JS and dependencies -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>

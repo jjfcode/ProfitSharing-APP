@@ -1,4 +1,16 @@
 function addCost(companyId) {
+    // Check if company name is filled out first
+    const companySection = document.querySelector(`#costs-${companyId}`).closest('.company-section');
+    const companyNameInput = companySection.querySelector('.company-name');
+    const companyNameError = companySection.querySelector('.company-name-error');
+    
+    if (!companyNameInput.value.trim()) {
+        companyNameError.style.display = 'block';
+        companyNameInput.classList.add('is-invalid');
+        companyNameInput.focus();
+        return;
+    }
+
     const costContainer = document.getElementById(`costs-${companyId}`);
     const costItem = document.createElement('div');
     costItem.className = 'cost-item mb-2';
@@ -37,9 +49,38 @@ function calculateTotalCosts() {
 }
 
 function generateCompanyFields() {
-    const numberOfCompanies = parseInt(document.getElementById('numberOfCompanies').value);
-    if (!numberOfCompanies || numberOfCompanies < 1) {
-        alert('Please enter a valid number of companies');
+    // Check if show name is filled out first
+    const showNameInput = document.getElementById('showName');
+    const showNameError = document.getElementById('showNameError');
+    const showName = showNameInput.value.trim();
+    
+    if (showName === '') {
+        showNameError.style.display = 'block';
+        showNameInput.classList.add('is-invalid');
+        showNameInput.focus();
+        return;
+    }
+
+    // Check if total amount is filled out
+    const totalAmountInput = document.getElementById('totalAmount');
+    const totalAmountError = document.getElementById('totalAmountError');
+    const totalAmount = totalAmountInput.value.trim();
+    
+    if (totalAmount === '' || parseFloat(totalAmount) <= 0) {
+        totalAmountError.style.display = 'block';
+        totalAmountInput.classList.add('is-invalid');
+        totalAmountInput.focus();
+        return;
+    }
+
+    const numberOfCompaniesInput = document.getElementById('numberOfCompanies');
+    const numberOfCompaniesError = document.getElementById('numberOfCompaniesError');
+    const numberOfCompanies = parseInt(numberOfCompaniesInput.value);
+    
+    if (!numberOfCompanies || numberOfCompanies < 2 || numberOfCompanies > 10) {
+        numberOfCompaniesError.style.display = 'block';
+        numberOfCompaniesInput.classList.add('is-invalid');
+        numberOfCompaniesInput.focus();
         return;
     }
 
@@ -52,8 +93,15 @@ function generateCompanyFields() {
         companySection.innerHTML = `
             <h4>Company ${i}</h4>
             <div class="form-group">
-                <label>Company Name</label>
-                <input type="text" class="form-control company-name" required>
+                <label>Company Name *</label>
+                <input type="text" 
+                       class="form-control company-name" 
+                       required 
+                       minlength="1"
+                       placeholder="Enter company name (required)">
+                <small class="text-danger company-name-error" style="display: none;">
+                    Please enter the company name
+                </small>
             </div>
             <div class="form-group">
                 <label>Costs</label>
@@ -72,6 +120,20 @@ function generateCompanyFields() {
             </div>
         `;
         container.appendChild(companySection);
+
+        // Add validation for company name input
+        const companyNameInput = companySection.querySelector('.company-name');
+        const companyNameError = companySection.querySelector('.company-name-error');
+        
+        companyNameInput.addEventListener('input', function() {
+            if (this.value.trim() === '') {
+                companyNameError.style.display = 'block';
+                this.classList.add('is-invalid');
+            } else {
+                companyNameError.style.display = 'none';
+                this.classList.remove('is-invalid');
+            }
+        });
     }
 
     document.getElementById('companiesSection').style.display = 'block';
@@ -81,9 +143,34 @@ document.addEventListener('DOMContentLoaded', function() {
     const form = document.getElementById('profitForm');
     const result = document.getElementById('result');
     const resultContent = document.getElementById('resultContent');
+    const showNameInput = document.getElementById('showName');
+    const showNameError = document.getElementById('showNameError');
+
+    // Show name validation
+    showNameInput.addEventListener('input', function() {
+        if (this.value.trim() === '') {
+            showNameError.style.display = 'block';
+            this.classList.add('is-invalid');
+        } else {
+            showNameError.style.display = 'none';
+            this.classList.remove('is-invalid');
+        }
+    });
 
     const totalAmountInput = document.getElementById('totalAmount');
+    const totalAmountError = document.getElementById('totalAmountError');
+
+    // Total amount validation
     totalAmountInput.addEventListener('input', function(e) {
+        if (this.value.trim() === '' || parseFloat(this.value) <= 0) {
+            totalAmountError.style.display = 'block';
+            this.classList.add('is-invalid');
+        } else {
+            totalAmountError.style.display = 'none';
+            this.classList.remove('is-invalid');
+        }
+
+        // Decimal validation
         let value = e.target.value;
         if (value.includes('.')) {
             const decimals = value.split('.')[1];
@@ -93,10 +180,33 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
+    const numberOfCompaniesInput = document.getElementById('numberOfCompanies');
+    const numberOfCompaniesError = document.getElementById('numberOfCompaniesError');
+
+    // Number of companies validation
+    numberOfCompaniesInput.addEventListener('input', function() {
+        const value = parseInt(this.value);
+        if (this.value.trim() === '' || value < 2 || value > 10) {
+            numberOfCompaniesError.style.display = 'block';
+            this.classList.add('is-invalid');
+        } else {
+            numberOfCompaniesError.style.display = 'none';
+            this.classList.remove('is-invalid');
+        }
+    });
+
     form.addEventListener('submit', function(e) {
         e.preventDefault();
         
-        const showName = document.getElementById('showName').value;
+        // Validate show name
+        const showName = showNameInput.value.trim();
+        if (showName === '') {
+            showNameError.style.display = 'block';
+            showNameInput.classList.add('is-invalid');
+            showNameInput.focus();
+            return;
+        }
+        
         const totalAmount = parseFloat(parseFloat(document.getElementById('totalAmount').value).toFixed(2));
         const companyNames = [...document.getElementsByClassName('company-name')].map(input => input.value);
         const companyCosts = [...document.getElementsByClassName('costs-container')].map(container => {
