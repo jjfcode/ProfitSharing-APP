@@ -15,10 +15,14 @@ function addCost(companyId) {
     // Check if there's an existing cost item with empty company name
     const existingCosts = companySection.querySelectorAll('.cost-company');
     for (let costInput of existingCosts) {
-        if (!costInput.value.trim()) {
+        const costItem = costInput.closest('.cost-item');
+        const amountInput = costItem.querySelector('.cost-amount');
+        
+        // Only validate if amount has a value
+        if (amountInput.value.trim() !== '' && !costInput.value.trim()) {
             costInput.classList.add('is-invalid');
             costInput.focus();
-            costInput.closest('.cost-item').querySelector('.cost-error').style.display = 'block';
+            costItem.querySelector('.cost-error').style.display = 'block';
             return;
         }
     }
@@ -31,32 +35,50 @@ function addCost(companyId) {
         <div class="input-group">
             <input type="text" 
                    class="form-control cost-company" 
-                   placeholder="Company name for cost *" 
-                   required>
+                   placeholder="Company name for cost">
             <input type="text" 
                    class="form-control cost-description" 
-                   placeholder="Cost description *" 
-                   required>
+                   placeholder="Cost description">
             <input type="number" 
                    class="form-control cost-amount" 
-                   placeholder="Amount *" 
+                   placeholder="Amount" 
                    step="0.01" 
-                   min="0" 
-                   required>
+                   min="0">
             <div class="input-group-append">
                 <button type="button" class="btn btn-danger" onclick="removeCost(this)">×</button>
             </div>
         </div>
         <div class="invalid-feedback cost-error" style="display: none;">
-            All fields are required
+            Company name and description are required when amount is entered
         </div>
     `;
     
-    // Add validation for all cost fields
+    // Add validation for cost fields
     const costCompanyInput = costItem.querySelector('.cost-company');
     const costDescInput = costItem.querySelector('.cost-description');
     const costAmountInput = costItem.querySelector('.cost-amount');
     const costError = costItem.querySelector('.cost-error');
+
+    function validateCostFields() {
+        if (costAmountInput.value.trim() !== '') {
+            // Only validate if amount has a value
+            const companyValid = costCompanyInput.value.trim() !== '';
+            const descValid = costDescInput.value.trim() !== '';
+
+            if (!companyValid || !descValid) {
+                costError.style.display = 'block';
+                if (!companyValid) costCompanyInput.classList.add('is-invalid');
+                if (!descValid) costDescInput.classList.add('is-invalid');
+                return false;
+            }
+        }
+        
+        // If no amount or all fields are valid
+        costError.style.display = 'none';
+        costCompanyInput.classList.remove('is-invalid');
+        costDescInput.classList.remove('is-invalid');
+        return true;
+    }
 
     // Handle Enter key in amount field
     costAmountInput.addEventListener('keydown', function(e) {
@@ -68,26 +90,6 @@ function addCost(companyId) {
             }
         }
     });
-
-    function validateCostFields() {
-        const companyValid = costCompanyInput.value.trim() !== '';
-        const descValid = costDescInput.value.trim() !== '';
-        const amountValid = costAmountInput.value.trim() !== '' && parseFloat(costAmountInput.value) > 0;
-
-        if (!companyValid || !descValid || !amountValid) {
-            costError.style.display = 'block';
-            if (!companyValid) costCompanyInput.classList.add('is-invalid');
-            if (!descValid) costDescInput.classList.add('is-invalid');
-            if (!amountValid) costAmountInput.classList.add('is-invalid');
-            return false;
-        } else {
-            costError.style.display = 'none';
-            costCompanyInput.classList.remove('is-invalid');
-            costDescInput.classList.remove('is-invalid');
-            costAmountInput.classList.remove('is-invalid');
-            return true;
-        }
-    }
 
     costCompanyInput.addEventListener('input', validateCostFields);
     costDescInput.addEventListener('input', validateCostFields);
@@ -178,28 +180,28 @@ function generateCompanyFields() {
                         <div class="input-group">
                             <input type="text" 
                                    class="form-control cost-company" 
-                                   placeholder="Company name for cost *" 
-                                   required>
+                                   placeholder="Company name for cost">
                             <input type="text" 
                                    class="form-control cost-description" 
-                                   placeholder="Cost description *" 
-                                   required>
+                                   placeholder="Cost description">
                             <input type="number" 
                                    class="form-control cost-amount" 
-                                   placeholder="Amount *" 
+                                   placeholder="Amount" 
                                    step="0.01" 
-                                   min="0" 
-                                   required>
+                                   min="0">
                             <div class="input-group-append">
                                 <button type="button" class="btn btn-danger" onclick="removeCost(this)">×</button>
                             </div>
                         </div>
                         <div class="invalid-feedback cost-error" style="display: none;">
-                            All fields are required
+                            Company name and description are required when amount is entered
                         </div>
                     </div>
                 </div>
-                <button type="button" class="btn btn-secondary btn-sm mt-2" onclick="addCost(${i})">+ Add Cost</button>
+                <div class="btn-group mt-2">
+                    <button type="button" class="btn btn-secondary btn-sm" onclick="addCost(${i})">+ Add Cost</button>
+                    <button type="button" class="btn btn-info btn-sm" onclick="markNoCost(${i})">No Cost</button>
+                </div>
             </div>
         `;
         container.appendChild(companySection);
@@ -298,6 +300,12 @@ document.addEventListener('DOMContentLoaded', function() {
             showNameError.style.display = 'block';
             showNameInput.classList.add('is-invalid');
             showNameInput.focus();
+            return;
+        }
+
+        // Validate all costs before proceeding
+        if (!validateAllCosts()) {
+            alert('Please complete or remove any partially filled cost entries');
             return;
         }
         
@@ -448,4 +456,50 @@ function calculatePercentageShares() {
     });
 
     document.getElementById('resultContent').innerHTML = sharesHtml;
+}
+
+function markNoCost(companyId) {
+    const costContainer = document.getElementById(`costs-${companyId}`);
+    // Remove all existing costs
+    costContainer.innerHTML = `
+        <div class="alert alert-info mb-2">
+            This company has no costs
+        </div>
+    `;
+    // Hide the cost buttons after marking as no cost
+    const btnGroup = costContainer.nextElementSibling;
+    btnGroup.style.display = 'none';
+}
+
+function validateAllCosts() {
+    const costItems = document.querySelectorAll('.cost-item');
+    let isValid = true;
+
+    costItems.forEach(costItem => {
+        const companyInput = costItem.querySelector('.cost-company');
+        const descInput = costItem.querySelector('.cost-description');
+        const amountInput = costItem.querySelector('.cost-amount');
+        const costError = costItem.querySelector('.cost-error');
+
+        // Skip validation if this is a "No Cost" company
+        if (!companyInput || !descInput || !amountInput) return;
+
+        // Only validate if amount has a value
+        if (amountInput.value.trim() !== '') {
+            if (!companyInput.value.trim() || !descInput.value.trim()) {
+                costError.style.display = 'block';
+                if (!companyInput.value.trim()) companyInput.classList.add('is-invalid');
+                if (!descInput.value.trim()) descInput.classList.add('is-invalid');
+                isValid = false;
+            }
+        } else {
+            // If amount is empty, remove any validation styling
+            costError.style.display = 'none';
+            companyInput.classList.remove('is-invalid');
+            descInput.classList.remove('is-invalid');
+            amountInput.classList.remove('is-invalid');
+        }
+    });
+
+    return isValid;
 } 
