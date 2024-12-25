@@ -58,6 +58,17 @@ function addCost(companyId) {
     const costAmountInput = costItem.querySelector('.cost-amount');
     const costError = costItem.querySelector('.cost-error');
 
+    // Handle Enter key in amount field
+    costAmountInput.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            const addCostButton = this.closest('.company-section').querySelector('.btn-secondary');
+            if (validateCostFields()) {
+                addCostButton.click();
+            }
+        }
+    });
+
     function validateCostFields() {
         const companyValid = costCompanyInput.value.trim() !== '';
         const descValid = costDescInput.value.trim() !== '';
@@ -68,11 +79,13 @@ function addCost(companyId) {
             if (!companyValid) costCompanyInput.classList.add('is-invalid');
             if (!descValid) costDescInput.classList.add('is-invalid');
             if (!amountValid) costAmountInput.classList.add('is-invalid');
+            return false;
         } else {
             costError.style.display = 'none';
             costCompanyInput.classList.remove('is-invalid');
             costDescInput.classList.remove('is-invalid');
             costAmountInput.classList.remove('is-invalid');
+            return true;
         }
     }
 
@@ -202,6 +215,17 @@ function generateCompanyFields() {
             } else {
                 companyNameError.style.display = 'none';
                 this.classList.remove('is-invalid');
+            }
+        });
+
+        const initialCostAmount = companySection.querySelector('.cost-amount');
+        initialCostAmount.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                const addCostButton = this.closest('.company-section').querySelector('.btn-secondary');
+                if (this.value.trim() !== '') {
+                    addCostButton.click();
+                }
             }
         });
     }
