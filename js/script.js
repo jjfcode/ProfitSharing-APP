@@ -4,6 +4,7 @@ function addCost(companyId) {
     const companyNameInput = companySection.querySelector('.company-name');
     const companyNameError = companySection.querySelector('.company-name-error');
     
+    // Check main company name
     if (!companyNameInput.value.trim()) {
         companyNameError.style.display = 'block';
         companyNameInput.classList.add('is-invalid');
@@ -11,21 +12,74 @@ function addCost(companyId) {
         return;
     }
 
+    // Check if there's an existing cost item with empty company name
+    const existingCosts = companySection.querySelectorAll('.cost-company');
+    for (let costInput of existingCosts) {
+        if (!costInput.value.trim()) {
+            costInput.classList.add('is-invalid');
+            costInput.focus();
+            costInput.closest('.cost-item').querySelector('.cost-error').style.display = 'block';
+            return;
+        }
+    }
+
+    // If all existing company names are filled, add new cost item
     const costContainer = document.getElementById(`costs-${companyId}`);
     const costItem = document.createElement('div');
     costItem.className = 'cost-item mb-2';
     costItem.innerHTML = `
         <div class="input-group">
-            <input type="text" class="form-control cost-description" placeholder="Cost description">
-            <input type="number" class="form-control cost-amount" placeholder="Amount" step="0.01" min="0">
+            <input type="text" 
+                   class="form-control cost-company" 
+                   placeholder="Company name for cost *" 
+                   required>
+            <input type="text" 
+                   class="form-control cost-description" 
+                   placeholder="Cost description *" 
+                   required>
+            <input type="number" 
+                   class="form-control cost-amount" 
+                   placeholder="Amount *" 
+                   step="0.01" 
+                   min="0" 
+                   required>
             <div class="input-group-append">
                 <button type="button" class="btn btn-danger" onclick="removeCost(this)">×</button>
             </div>
         </div>
+        <div class="invalid-feedback cost-error" style="display: none;">
+            All fields are required
+        </div>
     `;
     
-    const costInput = costItem.querySelector('.cost-amount');
-    costInput.addEventListener('input', function(e) {
+    // Add validation for all cost fields
+    const costCompanyInput = costItem.querySelector('.cost-company');
+    const costDescInput = costItem.querySelector('.cost-description');
+    const costAmountInput = costItem.querySelector('.cost-amount');
+    const costError = costItem.querySelector('.cost-error');
+
+    function validateCostFields() {
+        const companyValid = costCompanyInput.value.trim() !== '';
+        const descValid = costDescInput.value.trim() !== '';
+        const amountValid = costAmountInput.value.trim() !== '' && parseFloat(costAmountInput.value) > 0;
+
+        if (!companyValid || !descValid || !amountValid) {
+            costError.style.display = 'block';
+            if (!companyValid) costCompanyInput.classList.add('is-invalid');
+            if (!descValid) costDescInput.classList.add('is-invalid');
+            if (!amountValid) costAmountInput.classList.add('is-invalid');
+        } else {
+            costError.style.display = 'none';
+            costCompanyInput.classList.remove('is-invalid');
+            costDescInput.classList.remove('is-invalid');
+            costAmountInput.classList.remove('is-invalid');
+        }
+    }
+
+    costCompanyInput.addEventListener('input', validateCostFields);
+    costDescInput.addEventListener('input', validateCostFields);
+    costAmountInput.addEventListener('input', function(e) {
+        // Decimal validation
         let value = e.target.value;
         if (value.includes('.')) {
             const decimals = value.split('.')[1];
@@ -33,6 +87,7 @@ function addCost(companyId) {
                 e.target.value = parseFloat(value).toFixed(2);
             }
         }
+        validateCostFields();
     });
     
     costContainer.appendChild(costItem);
@@ -108,11 +163,26 @@ function generateCompanyFields() {
                 <div id="costs-${i}" class="costs-container">
                     <div class="cost-item mb-2">
                         <div class="input-group">
-                            <input type="text" class="form-control cost-description" placeholder="Cost description">
-                            <input type="number" class="form-control cost-amount" placeholder="Amount" step="0.01" min="0">
+                            <input type="text" 
+                                   class="form-control cost-company" 
+                                   placeholder="Company name for cost *" 
+                                   required>
+                            <input type="text" 
+                                   class="form-control cost-description" 
+                                   placeholder="Cost description *" 
+                                   required>
+                            <input type="number" 
+                                   class="form-control cost-amount" 
+                                   placeholder="Amount *" 
+                                   step="0.01" 
+                                   min="0" 
+                                   required>
                             <div class="input-group-append">
                                 <button type="button" class="btn btn-danger" onclick="removeCost(this)">×</button>
                             </div>
+                        </div>
+                        <div class="invalid-feedback cost-error" style="display: none;">
+                            All fields are required
                         </div>
                     </div>
                 </div>
@@ -286,6 +356,22 @@ document.addEventListener('DOMContentLoaded', function() {
         }
 
         result.style.display = 'block';
+    });
+
+    // Prevent form submission on Enter key and trigger Add Companies button
+    form.addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            
+            // Check if we have enough data to generate company fields
+            const showName = document.getElementById('showName').value.trim();
+            const totalAmount = document.getElementById('totalAmount').value.trim();
+            const numberOfCompanies = document.getElementById('numberOfCompanies').value.trim();
+            
+            if (showName && totalAmount && numberOfCompanies) {
+                generateCompanyFields();
+            }
+        }
     });
 });
 
