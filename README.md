@@ -6,6 +6,59 @@ A professional web application designed to simplify profit sharing calculations 
 
 Try the application here: [Profit Sharing Calculator](https://jjfcode.github.io/ProfitSharing-APP/)
 
+## How to Use
+
+1. Enter Show Details:
+   - Input the show name
+   - Enter the total amount
+   - Specify number of companies (2-10)
+   - Click "Add Companies"
+
+2. For Each Company:
+   - Enter company name
+   - Add costs (if any):
+     * Company name for cost
+     * Cost description
+     * Amount
+   - Or click "No Cost" if company has no costs
+   - Use "+ Add Cost" for multiple costs
+
+3. Choose Distribution Method:
+   - Equal Share: Splits remaining profit equally
+   - Percentage Based: Distribute by specified percentages
+
+4. View and Export Results:
+   - Review the calculation breakdown
+   - See individual company shares
+   - Export results to PDF
+   - Save detailed reports
+
+#### Frontend
+- **index.html**: Main application interface
+- **css/styles.css**: Custom styling and layout
+- **js/script.js**: Core application functionality
+- **js/saveResults.js**: PDF export functionality
+
+#### Backend (Optional - Contact Form)
+- **js/contact.js**: Contact form handling
+- **server/server.js**: Express server setup
+- **.env**: Environment configuration
+- **package.json**: Project dependencies
+
+#### Configuration
+- **.gitignore**:
+  ```
+  node_modules/
+  .env
+  ```
+
+- **.env**:
+  ```
+  EMAIL_USER=your-gmail@gmail.com
+  EMAIL_PASS=your-gmail-app-password
+  PORT=3000
+  ```
+
 ## Features
 
 - **Flexible Distribution Methods**
@@ -30,29 +83,64 @@ Try the application here: [Profit Sharing Calculator](https://jjfcode.github.io/
   - Real-time validation
   - Responsive layout
   - Clear error messages
+  
+  
+## Installation and Setup
 
-## How to Use
+### 1. Initialize Project
+```bash
+# Create package.json
+npm init -y
+```
 
-1. Open `index.html` in a web browser.
-2. Fill in the form with the show name, total amount, and number of companies.
-3. Click "Add Companies" to generate fields for each company.
-4. Enter the company names and their associated costs.
-5. Choose the distribution type (equal share or percentage-based).
-6. Click "Calculate" to see the results.
+### 2. Install Dependencies
+```bash
+# Install required packages
+npm install express cors nodemailer dotenv
 
-## Technical Details
+# Install development dependencies
+npm install nodemon --save-dev
+```
 
-### Built With
-- HTML5
-- CSS3 with Bootstrap 4.5.2
-- Vanilla JavaScript
-- jsPDF for PDF generation
+### 3. Configure package.json
+Replace or update your package.json with:
+```json
+{
+  "name": "profitsharing-app",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server/server.js",
+  "scripts": {
+    "start": "node server/server.js",
+    "dev": "nodemon server/server.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "nodemailer": "^6.9.7"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.9"
+  }
+}
+```
 
-### Dependencies
-- Bootstrap 4.5.2
-- jQuery 3.5.1 (Bootstrap dependency)
-- Popper.js 2.9.3 (Bootstrap dependency)
-- jsPDF 2.5.1
+### 4. Start the Server
+```bash
+# Development mode (with auto-reload)
+npm run dev
+
+# OR Production mode
+npm start
+```
+
+### Important Notes:
+- Run `npm install` after cloning the repository
+- Make sure Node.js is installed on your system
+- The server must be running for the contact form to work
+- Contact form functionality is optional
+- Frontend features work without server setup
 
 ## GitHub Repository
 
