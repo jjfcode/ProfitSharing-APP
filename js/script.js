@@ -415,6 +415,24 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         }
     });
+
+    document.getElementById('contactForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const name = document.getElementById('contactName').value;
+        const email = document.getElementById('contactEmail').value;
+        const message = document.getElementById('contactMessage').value;
+
+        // Here you would typically send this data to a server
+        // For now, we'll just show a success message
+        alert(`Thank you for your message, ${name}! We'll get back to you at ${email} soon.`);
+        
+        // Close the modal
+        $('#contactModal').modal('hide');
+        
+        // Reset the form
+        this.reset();
+    });
 });
 
 function calculatePercentageShares() {

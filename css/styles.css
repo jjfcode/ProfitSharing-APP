@@ -53,4 +53,33 @@ h1, h2, h3, h4 {
 
 .btn {
     font-weight: 500;
+}
+
+/* Add these styles */
+.modal-header {
+    background-color: #007bff;
+    color: white;
+}
+
+.modal-header .close {
+    color: white;
+    opacity: 1;
+}
+
+.modal-footer {
+    background-color: #f8f9fa;
+}
+
+.modal-footer a {
+    color: #007bff;
+}
+
+.modal-footer a:hover {
+    text-decoration: none;
+    color: #0056b3;
+}
+
+#contactForm textarea {
+    resize: vertical;
+    min-height: 100px;
 } 
