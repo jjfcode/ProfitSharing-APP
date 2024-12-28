@@ -145,4 +145,72 @@ function saveToFile(distributionType) {
 
     // Save the PDF
     doc.save(`${showName.replace(/\s+/g, '_')}_profit_sharing.pdf`);
+}
+
+// Add Excel export function
+function saveToExcel(distributionType) {
+    // Create Excel content in CSV format
+    let csvContent = 'Profit Sharing Calculation Results\n\n';
+    
+    // Get data
+    const showName = document.getElementById('showName').value;
+    const totalAmount = parseFloat(document.getElementById('totalAmount').value);
+    const companyNames = [...document.getElementsByClassName('company-name')].map(input => input.value);
+    const companyCosts = [...document.getElementsByClassName('costs-container')].map(container => {
+        const costs = [...container.getElementsByClassName('cost-amount')]
+            .map((input, index) => {
+                const costRow = input.closest('.cost-item');
+                if (costRow) {
+                    return {
+                        company: costRow.querySelector('.cost-company').value,
+                        description: costRow.querySelector('.cost-description').value,
+                        amount: parseFloat(input.value) || 0
+                    };
+                }
+                return null;
+            })
+            .filter(cost => cost !== null && cost.amount > 0);
+        return costs;
+    });
+
+    const totalCosts = parseFloat(companyCosts.flat().reduce((a, b) => a + b.amount, 0).toFixed(2));
+    const netAmount = parseFloat((totalAmount - totalCosts).toFixed(2));
+
+    // Add summary information
+    csvContent += `Show Name,${showName}\n`;
+    csvContent += `Total Amount,$${totalAmount.toFixed(2)}\n`;
+    csvContent += `Total Costs,$${totalCosts.toFixed(2)}\n`;
+    csvContent += `Net Amount,$${netAmount.toFixed(2)}\n\n`;
+
+    // Add company details
+    csvContent += 'Company Details\n';
+    csvContent += 'Company Name,Cost Company,Cost Description,Amount,Share Amount,Check Amount\n';
+
+    companyNames.forEach((name, index) => {
+        if (companyCosts[index].length > 0) {
+            companyCosts[index].forEach(cost => {
+                const share = distributionType === 'equal' 
+                    ? netAmount / companyNames.length 
+                    : (document.querySelectorAll('.percentage-input')[index].value / 100) * netAmount;
+                const checkAmount = cost.amount + share;
+
+                csvContent += `${name},${cost.company},${cost.description},$${cost.amount.toFixed(2)},$${share.toFixed(2)},$${checkAmount.toFixed(2)}\n`;
+            });
+        } else {
+            const share = distributionType === 'equal' 
+                ? netAmount / companyNames.length 
+                : (document.querySelectorAll('.percentage-input')[index].value / 100) * netAmount;
+            
+            csvContent += `${name},No costs,,-,$${share.toFixed(2)},$${share.toFixed(2)}\n`;
+        }
+    });
+
+    // Create and download the Excel file
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = `${showName.replace(/\s+/g, '_')}_profit_sharing.csv`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
 } 

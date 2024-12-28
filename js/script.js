@@ -361,11 +361,18 @@ document.addEventListener('DOMContentLoaded', function() {
             });
 
             resultContent.innerHTML = resultsHtml;
-            const saveButton = document.createElement('button');
-            saveButton.className = 'btn btn-primary mt-3';
-            saveButton.innerHTML = 'Save Results';
-            saveButton.onclick = () => saveToFile('equal');
-            resultContent.appendChild(saveButton);
+            const saveButtonGroup = document.createElement('div');
+            saveButtonGroup.className = 'dropdown d-inline-block';
+            saveButtonGroup.innerHTML = `
+                <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Save Results
+                </button>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    <button class="dropdown-item" onclick="saveToFile('equal')">Save as PDF</button>
+                    <button class="dropdown-item" onclick="saveToExcel('equal')">Save as Excel</button>
+                </div>
+            `;
+            resultContent.appendChild(saveButtonGroup);
         } else {
             // For percentage-based distribution
             let percentageInputs = `
@@ -390,11 +397,18 @@ document.addEventListener('DOMContentLoaded', function() {
             
             percentageInputs += '<button class="btn btn-success" onclick="calculatePercentageShares()">Calculate Shares</button>';
             resultContent.innerHTML = percentageInputs;
-            const saveButton = document.createElement('button');
-            saveButton.className = 'btn btn-primary mt-3';
-            saveButton.innerHTML = 'Save Results';
-            saveButton.onclick = () => saveToFile('percentage');
-            resultContent.appendChild(saveButton);
+            const saveButtonGroup = document.createElement('div');
+            saveButtonGroup.className = 'dropdown d-inline-block';
+            saveButtonGroup.innerHTML = `
+                <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Save Results
+                </button>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton2">
+                    <button class="dropdown-item" onclick="saveToFile('percentage')">Save as PDF</button>
+                    <button class="dropdown-item" onclick="saveToExcel('percentage')">Save as Excel</button>
+                </div>
+            `;
+            resultContent.appendChild(saveButtonGroup);
         }
 
         result.style.display = 'block';
@@ -484,11 +498,18 @@ function calculatePercentageShares() {
     });
 
     document.getElementById('resultContent').innerHTML = sharesHtml;
-    const saveButton = document.createElement('button');
-    saveButton.className = 'btn btn-primary mt-3';
-    saveButton.innerHTML = 'Save Results';
-    saveButton.onclick = () => saveToFile('percentage');
-    resultContent.appendChild(saveButton);
+    const saveButtonGroup = document.createElement('div');
+    saveButtonGroup.className = 'dropdown d-inline-block';
+    saveButtonGroup.innerHTML = `
+        <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton3" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Save Results
+        </button>
+        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton3">
+            <button class="dropdown-item" onclick="saveToFile('percentage')">Save as PDF</button>
+            <button class="dropdown-item" onclick="saveToExcel('percentage')">Save as Excel</button>
+        </div>
+    `;
+    resultContent.appendChild(saveButtonGroup);
 }
 
 function markNoCost(companyId) {
