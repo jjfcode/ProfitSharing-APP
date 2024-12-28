@@ -27,6 +27,21 @@ function saveToFile(distributionType) {
     const totalCosts = parseFloat(companyCosts.flat().reduce((a, b) => a + b.amount, 0).toFixed(2));
     const netAmount = parseFloat((totalAmount - totalCosts).toFixed(2));
 
+    // Calculate shares based on distribution type
+    const shares = companyNames.map((_, index) => {
+        if (distributionType === 'equal') {
+            return netAmount / companyNames.length;
+        } else {
+            // Only try to get percentages if we're in the final calculation view
+            const percentageInputs = document.querySelectorAll('.percentage-input');
+            if (percentageInputs.length > 0) {
+                return (parseFloat(percentageInputs[index].value) / 100) * netAmount;
+            }
+            // Return 0 if we're still in the percentage input view
+            return 0;
+        }
+    });
+
     // Helper function to draw a line
     function drawLine(y) {
         doc.setDrawColor(200, 200, 200);
@@ -101,34 +116,32 @@ function saveToFile(distributionType) {
 
         // Share information
         y += 5;
+        const share = shares[index];
+        const checkAmount = (companyCosts[index].reduce((a, b) => a + b.amount, 0) + share);
+        
         if (distributionType === 'equal') {
-            const sharePerCompany = netAmount / companyNames.length;
-            const checkAmount = (companyCosts[index].reduce((a, b) => a + b.amount, 0) + sharePerCompany);
-            
             doc.text('Share Amount:', 25, y);
-            doc.text(`$${sharePerCompany.toFixed(2)}`, 175, y, { align: 'right' }); 
+            doc.text(`$${share.toFixed(2)}`, 175, y, { align: 'right' }); 
             y += 7;
-            
-            doc.setTextColor(40, 167, 69); // Bootstrap success color
-            doc.text('Final Check Amount:', 25, y);
-            doc.text(`$${checkAmount.toFixed(2)}`, 175, y, { align: 'right' });
-            doc.setTextColor(0, 0, 0);
-            y += 15;
         } else {
-            const percentage = document.querySelectorAll('.percentage-input')[index].value;
-            const share = (percentage / 100) * netAmount;
-            const checkAmount = (companyCosts[index].reduce((a, b) => a + b.amount, 0) + share);
-            
-            doc.text(`Share Amount (${percentage}%)`, 25, y);
-            doc.text(`$${share.toFixed(2)}`, 175, y, { align: 'right' });
+            // Only try to get percentages if we're in the final calculation view
+            const percentageInputs = document.querySelectorAll('.percentage-input');
+            if (percentageInputs.length > 0) {
+                const percentage = percentageInputs[index].value;
+                doc.text(`Share Amount (${percentage}%)`, 25, y);
+                doc.text(`$${share.toFixed(2)}`, 175, y, { align: 'right' });
+            } else {
+                doc.text('Share Amount:', 25, y);
+                doc.text(`$${share.toFixed(2)}`, 175, y, { align: 'right' });
+            }
             y += 7;
-            
-            doc.setTextColor(40, 167, 69); // Bootstrap success color
-            doc.text('Final Check Amount:', 25, y);
-            doc.text(`$${checkAmount.toFixed(2)}`, 175, y, { align: 'right' });
-            doc.setTextColor(0, 0, 0);
-            y += 15;
         }
+        
+        doc.setTextColor(40, 167, 69);
+        doc.text('Final Check Amount:', 25, y);
+        doc.text(`$${checkAmount.toFixed(2)}`, 175, y, { align: 'right' });
+        doc.setTextColor(0, 0, 0);
+        y += 15;
 
         drawLine(y - 5);
     });
@@ -189,17 +202,35 @@ function saveToExcel(distributionType) {
     companyNames.forEach((name, index) => {
         if (companyCosts[index].length > 0) {
             companyCosts[index].forEach(cost => {
-                const share = distributionType === 'equal' 
-                    ? netAmount / companyNames.length 
-                    : (document.querySelectorAll('.percentage-input')[index].value / 100) * netAmount;
+                let share;
+                if (distributionType === 'equal') {
+                    share = netAmount / companyNames.length;
+                } else {
+                    // Only try to get percentages if we're in the final calculation view
+                    const percentageInputs = document.querySelectorAll('.percentage-input');
+                    if (percentageInputs.length > 0) {
+                        share = (parseFloat(percentageInputs[index].value) / 100) * netAmount;
+                    } else {
+                        share = 0; // If we're still in the percentage input view
+                    }
+                }
                 const checkAmount = cost.amount + share;
 
                 csvContent += `${name},${cost.company},${cost.description},$${cost.amount.toFixed(2)},$${share.toFixed(2)},$${checkAmount.toFixed(2)}\n`;
             });
         } else {
-            const share = distributionType === 'equal' 
-                ? netAmount / companyNames.length 
-                : (document.querySelectorAll('.percentage-input')[index].value / 100) * netAmount;
+            let share;
+            if (distributionType === 'equal') {
+                share = netAmount / companyNames.length;
+            } else {
+                // Only try to get percentages if we're in the final calculation view
+                const percentageInputs = document.querySelectorAll('.percentage-input');
+                if (percentageInputs.length > 0) {
+                    share = (parseFloat(percentageInputs[index].value) / 100) * netAmount;
+                } else {
+                    share = 0; // If we're still in the percentage input view
+                }
+            }
             
             csvContent += `${name},No costs,,-,$${share.toFixed(2)},$${share.toFixed(2)}\n`;
         }
