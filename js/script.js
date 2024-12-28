@@ -373,6 +373,15 @@ document.addEventListener('DOMContentLoaded', function() {
                 </div>
             `;
             resultContent.appendChild(saveButtonGroup);
+
+            createCharts(
+                totalAmount,
+                totalCosts,
+                netAmount,
+                companyNames,
+                companyCosts,
+                companyNames.map(() => netAmount / companyNames.length)
+            );
         } else {
             // For percentage-based distribution
             let percentageInputs = `
@@ -409,6 +418,15 @@ document.addEventListener('DOMContentLoaded', function() {
                 </div>
             `;
             resultContent.appendChild(saveButtonGroup);
+
+            createCharts(
+                totalAmount,
+                totalCosts,
+                netAmount,
+                companyNames,
+                companyCosts,
+                percentages.map(p => (p / 100) * netAmount)
+            );
         }
 
         result.style.display = 'block';

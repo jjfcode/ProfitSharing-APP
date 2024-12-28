@@ -140,7 +140,27 @@ function saveToFile(distributionType) {
         drawLine(y - 5);
     });
 
-    // Footer
+    // Add charts to PDF
+    const expensesChart = document.getElementById('expensesChart');
+    const companyChart = document.getElementById('companyChart');
+
+    if (expensesChart && companyChart) {
+        // Add new page for charts
+        doc.addPage();
+
+        // Add Expenses Chart
+        doc.setFontSize(16);
+        doc.text('Expenses vs Profit Breakdown', 20, 20);
+        const expensesChartImg = expensesChart.toDataURL('image/png');
+        doc.addImage(expensesChartImg, 'PNG', 20, 30, 170, 100);
+
+        // Add Company Breakdown Chart
+        doc.text('Company Breakdown', 20, 150);
+        const companyChartImg = companyChart.toDataURL('image/png');
+        doc.addImage(companyChartImg, 'PNG', 20, 160, 170, 100);
+    }
+
+    // Update page numbers
     const pageCount = doc.internal.getNumberOfPages();
     for (let i = 1; i <= pageCount; i++) {
         doc.setPage(i);
