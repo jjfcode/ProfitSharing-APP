@@ -473,6 +473,9 @@ function calculatePercentageShares() {
         return;
     }
 
+    // Store the percentages globally
+    window.storedPercentages = percentages;
+
     // Calculate and display shares
     let sharesHtml = `
         <div class="alert alert-info">

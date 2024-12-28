@@ -32,13 +32,7 @@ function saveToFile(distributionType) {
         if (distributionType === 'equal') {
             return netAmount / companyNames.length;
         } else {
-            // Only try to get percentages if we're in the final calculation view
-            const percentageInputs = document.querySelectorAll('.percentage-input');
-            if (percentageInputs.length > 0) {
-                return (parseFloat(percentageInputs[index].value) / 100) * netAmount;
-            }
-            // Return 0 if we're still in the percentage input view
-            return 0;
+            return (window.storedPercentages[index] / 100) * netAmount;
         }
     });
 
@@ -206,13 +200,7 @@ function saveToExcel(distributionType) {
                 if (distributionType === 'equal') {
                     share = netAmount / companyNames.length;
                 } else {
-                    // Only try to get percentages if we're in the final calculation view
-                    const percentageInputs = document.querySelectorAll('.percentage-input');
-                    if (percentageInputs.length > 0) {
-                        share = (parseFloat(percentageInputs[index].value) / 100) * netAmount;
-                    } else {
-                        share = 0; // If we're still in the percentage input view
-                    }
+                    share = (window.storedPercentages[index] / 100) * netAmount;
                 }
                 const checkAmount = cost.amount + share;
 
@@ -223,13 +211,7 @@ function saveToExcel(distributionType) {
             if (distributionType === 'equal') {
                 share = netAmount / companyNames.length;
             } else {
-                // Only try to get percentages if we're in the final calculation view
-                const percentageInputs = document.querySelectorAll('.percentage-input');
-                if (percentageInputs.length > 0) {
-                    share = (parseFloat(percentageInputs[index].value) / 100) * netAmount;
-                } else {
-                    share = 0; // If we're still in the percentage input view
-                }
+                share = (window.storedPercentages[index] / 100) * netAmount;
             }
             
             csvContent += `${name},No costs,,-,$${share.toFixed(2)},$${share.toFixed(2)}\n`;
