@@ -1,13 +1,10 @@
 const CACHE_NAME = 'profit-sharing-calculator-v1';
 const urlsToCache = [
-  '/',
-  '/index.html',
-  '/css/styles.css',
-  '/js/script.js',
-  '/js/charts.js',
-  '/js/saveResults.js',
-  '/js/darkMode.js',
-  '/js/contact.js'
+  '/ProfitSharing-APP/',
+  '/ProfitSharing-APP/index.html',
+  '/ProfitSharing-APP/css/styles.css',
+  '/ProfitSharing-APP/js/script.js',
+  '/ProfitSharing-APP/manifest.json'
 ];
 
 self.addEventListener('install', event => {
