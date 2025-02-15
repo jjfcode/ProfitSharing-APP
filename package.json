@@ -5,8 +5,7 @@
   "main": "server/server.js",
   "scripts": {
     "start": "node server/server.js",
-    "dev": "nodemon server/server.js",
-    "deploy": "gh-pages -d ."
+    "dev": "nodemon server/server.js"
   },
   "dependencies": {
     "cors": "^2.8.5",
@@ -15,7 +14,6 @@
     "nodemailer": "^6.9.7"
   },
   "devDependencies": {
-    "gh-pages": "^6.3.0",
     "nodemon": "^3.1.9"
   },
   "homepage": "https://jjfcode.github.io/ProfitSharing-APP"
