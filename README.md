@@ -1,6 +1,6 @@
 # ProfitSharing-APP
 
-A professional web application designed to simplify profit sharing calculations among multiple companies. This tool helps production companies, event organizers, and business partners calculate and distribute profits while accounting for individual costs and expenses.
+A professional Progressive Web App (PWA) designed to simplify profit sharing calculations among multiple companies. This tool helps production companies, event organizers, and business partners calculate and distribute profits while accounting for individual costs and expenses.
 
 ## Live Demo
 
@@ -83,7 +83,13 @@ Try the application here: [Profit Sharing Calculator](https://jjfcode.github.io/
   - Real-time validation
   - Responsive layout
   - Clear error messages
-  
+
+- **Progressive Web App (PWA)**
+  - Install on any device
+  - Offline functionality
+  - App-like experience
+  - Quick loading times
+  - Mobile-friendly interface
   
 ## Installation and Setup
 
