@@ -33,6 +33,45 @@ Try the application here: [Profit Sharing Calculator](https://jjfcode.github.io/
    - Export results to PDF
    - Save detailed reports
 
+## Technical Stack
+
+### Frontend
+- HTML5, CSS3, JavaScript
+- Bootstrap 4.5.2
+- Chart.js for visualizations
+- PWA capabilities
+
+### Analytics & Monitoring
+- Google Analytics 4
+- Real-time user tracking
+- Installation metrics
+- Usage statistics
+
+### PWA Features
+- 📱 Installable on any device
+- 🔄 Works offline
+- ⚡ Fast loading times
+- 📲 App-like experience
+- 🔒 Secure HTTPS delivery
+- 📊 Usage analytics
+
+### Project Structure
+```bash
+profit-sharing-app/
+├── assets/
+│   └── icons/              # PWA icons
+├── css/
+│   └── styles.css         # Main styles
+├── js/
+│   ├── script.js         # Core logic
+│   ├── charts.js        # Chart functionality
+│   ├── darkMode.js     # Dark mode features
+│   ├── analytics.js    # Google Analytics
+│   └── saveResults.js  # PDF export
+├── index.html          # Main HTML
+├── manifest.json      # PWA manifest
+└── service-worker.js # Service worker
+
 #### Frontend
 - **index.html**: Main application interface
 - **css/styles.css**: Custom styling and layout
