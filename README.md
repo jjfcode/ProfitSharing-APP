@@ -61,37 +61,44 @@ Try the application here: [Profit Sharing Calculator](https://jjfcode.github.io/
 
 ## Features
 
-- **Flexible Distribution Methods**
-  - Equal share distribution
-  - Percentage-based distribution
-  - Support for 2-10 companies
+### Core Functionality
+- ✨ Equal share & percentage-based distribution
+- 📊 Support for 2-10 companies
+- 💰 Detailed cost management
+- 📱 PWA capabilities with offline support
+- 🌙 Dark mode support
+- 📄 PDF export functionality
 
-- **Cost Management**
-  - Add multiple costs per company
-  - Detailed cost descriptions
-  - Option to mark companies with no costs
-  - Real-time cost validation
+### PWA Features
+- 📱 Installable on any device
+- 🔄 Works offline
+- ⚡ Fast loading times
+- 📲 App-like experience
+- 🔒 Secure HTTPS delivery
 
-- **Results and Reporting**
-  - Detailed calculation breakdown
-  - Professional PDF export
-  - Clear cost summaries
-  - Individual company reports
+## Quick Start
 
-- **User-Friendly Interface**
-  - Intuitive form design
-  - Real-time validation
-  - Responsive layout
-  - Clear error messages
+1. Visit [Profit Sharing Calculator](https://jjfcode.github.io/ProfitSharing-APP/)
+2. Click "Install" when prompted (or use Add to Home Screen)
+3. Start calculating profit shares!
 
-- **Progressive Web App (PWA)**
-  - Install on any device
-  - Offline functionality
-  - App-like experience
-  - Quick loading times
-  - Mobile-friendly interface
-  
-## Installation and Setup
+## Local Development
+
+### Prerequisites
+- Node.js (v14 or higher)
+- npm (v6 or higher)
+
+### Installation
+```bash
+# Clone repository
+git clone https://github.com/yourusername/ProfitSharing-APP.git
+
+# Navigate to project
+cd ProfitSharing-APP
+
+# Install dependencies
+npm install
+```
 
 ### 1. Initialize Project
 ```bash
